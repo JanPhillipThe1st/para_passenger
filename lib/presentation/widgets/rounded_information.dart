@@ -4,8 +4,9 @@ import 'package:para_passenger/business_logic/cubit/user_cubit.dart';
 import 'package:para_passenger/presentation/utils.dart';
 
 class RoundedInformation extends StatefulWidget {
-  RoundedInformation({Key? key, this.text}) : super(key: key);
+  RoundedInformation({Key? key, this.text, this.child}) : super(key: key);
   String? text;
+  Widget? child;
   @override
   _RoundedInformationState createState() => _RoundedInformationState();
 }
@@ -26,10 +27,12 @@ class _RoundedInformationState extends State<RoundedInformation> {
               borderRadius: BorderRadius.circular(40),
               side: BorderSide(width: 4, color: textColor)),
           color: Color.fromARGB(255, 69, 137, 139)),
-      child: Text(
-        widget.text != null ? widget.text! : "",
-        style: defaultTextStyle.copyWith(fontSize: 16),
-      ),
+      child: widget.child == null
+          ? Text(
+              widget.text != null ? widget.text! : "",
+              style: defaultTextStyle.copyWith(fontSize: 16),
+            )
+          : widget.child!,
     );
   }
 }
