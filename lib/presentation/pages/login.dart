@@ -62,13 +62,16 @@ class _LoginState extends State<Login> {
               //         : snapshot.data!.username!);
               //   },
               // ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 20)),
               IconButton(
-                  style: ButtonStyle(backgroundColor: buttonColor),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => UserInfo()));
-                  },
-                  icon: Icon(Icons.login)),
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(buttonColor())),
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => UserInfo()));
+                },
+                icon: Icon(Icons.login),
+              ),
             ],
           ),
         ));
