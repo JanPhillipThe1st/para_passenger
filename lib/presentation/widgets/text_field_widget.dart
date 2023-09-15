@@ -6,10 +6,12 @@ class TextFieldWidget extends StatefulWidget {
   TextFieldWidget(
       {Key? key,
       this.hinttext,
+      this.obscured,
       required this.controller,
       required this.onchange})
       : super(key: key);
   String? hinttext;
+  bool? obscured = false;
   TextEditingController controller;
   void Function(String) onchange;
   @override
@@ -26,6 +28,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                 borderRadius: BorderRadius.circular(10),
                 side: BorderSide(color: borderColor))),
         child: TextField(
+          obscureText: widget.obscured != null ? widget.obscured! : false,
           onChanged: widget.onchange,
           controller: widget.controller,
           style:

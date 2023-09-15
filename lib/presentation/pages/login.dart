@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:para_passenger/business_logic/cubit/user_cubit.dart';
+import 'package:para_passenger/presentation/pages/home_screen.dart';
 import 'package:para_passenger/presentation/pages/user_info.dart';
 import 'package:para_passenger/presentation/utils.dart';
 import 'package:para_passenger/presentation/widgets/para_emblem.dart';
@@ -50,6 +53,7 @@ class _LoginState extends State<Login> {
               TextFieldWidget(
                 hinttext: "Password",
                 controller: _passwordController,
+                obscured: true,
                 onchange: (password) {
                   context.read<UserCubit>().state.password = password;
                 },
@@ -63,15 +67,44 @@ class _LoginState extends State<Login> {
               //   },
               // ),
               Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-              IconButton(
+              TextButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(buttonColor())),
-                onPressed: () {
+                    padding: MaterialStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 15)),
+                    backgroundColor: MaterialStateProperty.all(Colors.white)),
+                onPressed: () async {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => UserInfo()));
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
                 },
-                icon: Icon(Icons.login),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Login",
+                      style: defaultTextStyle.copyWith(
+                          color: Color.fromARGB(255, 14, 159, 179),
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 2.5),
+                    ),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                    Icon(
+                      Icons.login,
+                      color: Color.fromARGB(255, 14, 159, 179),
+                      weight: 10,
+                    ),
+                  ],
+                ),
               ),
+              Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Sign up",
+                    style: defaultTextStyle.copyWith(
+                        color: textColor,
+                        decorationColor: textColor,
+                        decoration: TextDecoration.underline),
+                  ))
             ],
           ),
         ));
