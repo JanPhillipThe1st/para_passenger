@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class NearbySearchResult {
   Summary? summary = Summary();
   List<Result>? results = [];

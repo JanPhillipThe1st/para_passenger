@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'route_details.dart';
@@ -21,8 +20,6 @@ class TomTomRouting {
       bool avoidTolls,
       bool avoidFerries,
       bool optimizeWaypoints) async {
-    var mode = "";
-    mode = travelMode.toString().replaceAll('TravelMode.', '');
     PolylineResult result = PolylineResult();
     var params = {
       "key": tomtomApiKey,

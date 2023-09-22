@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:para_passenger/business_logic/cubit/user_cubit.dart';
 import 'package:para_passenger/presentation/utils.dart';
 
+// ignore: must_be_immutable
 class RoundedInformation extends StatefulWidget {
   RoundedInformation({Key? key, this.text, this.child}) : super(key: key);
   String? text;

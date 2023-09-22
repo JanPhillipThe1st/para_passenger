@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:para_passenger/data/models/nearby_search_result_tomtom.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 
 class NearbySearch {
@@ -20,7 +17,6 @@ class NearbySearch {
 
   Future<Map<String, dynamic>> tomTomNearbySearchAsJSON(
       double lat, double lon) async {
-    NearbySearchResult nearbySearchResult = NearbySearchResult();
     final response = await http
         .get(TomTomRequestData(lat: lat, lon: lon).buildNetworkRequest());
     return jsonDecode(response.body);

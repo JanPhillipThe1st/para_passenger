@@ -10,7 +10,6 @@ class buttonColor extends MaterialStateColor {
   const buttonColor() : super(_defaultColor);
 
   static const int _defaultColor = 0xcafefeed;
-  static const int _pressedColor = 0xdeadbeef;
 
   @override
   Color resolve(Set<MaterialState> states) {

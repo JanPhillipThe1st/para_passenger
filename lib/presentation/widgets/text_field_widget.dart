@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:para_passenger/presentation/utils.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class TextFieldWidget extends StatefulWidget {
   TextFieldWidget(
       {Key? key,

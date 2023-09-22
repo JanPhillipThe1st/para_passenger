@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:para_passenger/business_logic/cubit/user_cubit.dart';
 import 'package:para_passenger/data/models/nearby_search_result_tomtom.dart';
 import 'package:para_passenger/data/repository/nearby_search.dart';
 import 'package:para_passenger/presentation/widgets/text_field_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:para_passenger/data/models/routing.dart';
 import 'package:geolocator/geolocator.dart';
@@ -29,8 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Position? currentLocation;
   NearbySearchResult searchNearbyResponse = NearbySearchResult();
   Future<void> getCurrentLocation() async {
-    print("Habe a lukesyon?");
-    bool serviceEnabled;
     LocationPermission permission;
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
