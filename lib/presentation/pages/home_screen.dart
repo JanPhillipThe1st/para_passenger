@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:para_passenger/business_logic/cubit/user_cubit.dart';
 import 'package:para_passenger/data/models/nearby_search_result_tomtom.dart';
 import 'package:para_passenger/data/repository/nearby_search.dart';
+import 'package:para_passenger/presentation/widgets/text_field_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:para_passenger/data/models/routing.dart';
@@ -24,7 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Marker? _passengerOrigin;
   Completer<GoogleMapController> _controller = Completer();
   TomTomRouting networkUtilTomTom = TomTomRouting();
+  List<Map<String, dynamic>> addresses = [];
   Position? currentLocation;
+  NearbySearchResult searchNearbyResponse = NearbySearchResult();
   Future<void> getCurrentLocation() async {
     print("Habe a lukesyon?");
     bool serviceEnabled;
@@ -52,11 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // continue accessing the position of the device.
     await Geolocator.getCurrentPosition().then((value) async {
       currentLocation = value;
-
-      NearbySearchResult searchNearbyResponse = await NearbySearch()
-          .tomTomNearbySearch(value.latitude, value.longitude);
-      print(searchNearbyResponse.summary!.numResults.toString());
-
+      Map<String, dynamic> poi = await NearbySearch()
+          .tomTomNearbySearchAsJSON(value.latitude, value.longitude);
+      for (Map<String, dynamic> result in poi["results"]) {
+        addresses.add(result["poi"]);
+      }
+      setState(() {});
       _passengerOrigin = Marker(
           markerId: MarkerId(context.read<UserCubit>().state.username!),
           infoWindow: InfoWindow(
@@ -87,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (!snapshot.hasData) {
                       return CircularProgressIndicator();
                     } else {
+                      print(snapshot.data);
                       return GoogleMap(
                         mapType: MapType.normal,
                         initialCameraPosition: CameraPosition(
@@ -98,10 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         markers: {
                           Marker(
-                              markerId: _passengerOrigin!.markerId,
-                              infoWindow: _passengerOrigin!.infoWindow,
-                              position: LatLng(snapshot.data!.latitude,
-                                  snapshot.data!.longitude))
+                            markerId: _passengerOrigin!.markerId,
+                            infoWindow: _passengerOrigin!.infoWindow,
+                            position: LatLng(snapshot.data!.latitude,
+                                snapshot.data!.longitude),
+                          )
                         },
                       );
                     }
@@ -179,11 +185,46 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(10),
+                      child: TextFieldWidget(
+                          hinttext: "Search for destination...",
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          hintTextColor: Colors.grey,
+                          controller: TextEditingController(),
+                          onchange: (value) {}),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 20),
+                      color: Colors.white,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Top Destinations",
+                              style: defaultTextStyle.copyWith(
+                                  color: Colors.black),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 4)),
+                            Icon(
+                              Icons.location_pin,
+                              size: 30,
+                              color: Colors.red,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
                       height: 500,
-                      padding: EdgeInsets.only(top: 10, bottom: 60),
+                      padding: EdgeInsets.only(bottom: 100),
                       color: Colors.white,
                       child: ListView.builder(
-                          itemCount: 20,
+                          itemCount: addresses.length,
                           itemBuilder: (context, index) {
                             return Container(
                               padding: EdgeInsets.symmetric(
@@ -197,7 +238,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     decoration: ShapeDecoration(
                                         shadows: [
                                           BoxShadow(
-                                              offset: Offset(0, 3),
+                                              color: Color.fromARGB(
+                                                  255, 22, 30, 37),
+                                              offset: Offset(0, 0),
                                               blurRadius: 2)
                                         ],
                                         shape: RoundedRectangleBorder(
@@ -205,8 +248,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 BorderRadius.circular(50)),
                                         gradient: LinearGradient(
                                             colors: [
-                                              Color.fromARGB(222, 0, 255, 234),
-                                              Color.fromARGB(222, 53, 17, 255),
+                                              Color.fromARGB(
+                                                  222, 120, 255, 244),
+                                              Color.fromARGB(222, 112, 87, 255),
                                             ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight)),
@@ -225,8 +269,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 5)),
-                                  Text(
-                                      "Place $index, Pagadian City, Zamboanga del Sur"),
+                                  Container(
+                                    width: 200,
+                                    child: Text(
+                                      addresses[index]["name"].toString(),
+                                      style: defaultTextStyle.copyWith(
+                                          color: Colors.black87, fontSize: 10),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5)),
+                                  Container(
+                                    decoration: ShapeDecoration(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        color: Colors.blue),
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "GO",
+                                            style: defaultTextStyle.copyWith(
+                                                fontSize: 10),
+                                          ),
+                                          Icon(
+                                            Icons.arrow_right,
+                                            color: textColor,
+                                            size: 15,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             );

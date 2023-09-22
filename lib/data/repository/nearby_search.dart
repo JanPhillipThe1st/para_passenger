@@ -23,12 +23,6 @@ class NearbySearch {
     NearbySearchResult nearbySearchResult = NearbySearchResult();
     final response = await http
         .get(TomTomRequestData(lat: lat, lon: lon).buildNetworkRequest());
-    print(TomTomRequestData(lat: lat, lon: lon).buildNetworkRequest());
-    print(response.body);
-    if (response.statusCode == 200) {
-      nearbySearchResult =
-          NearbySearchResult.fromJSON(jsonDecode(response.body));
-    }
     return jsonDecode(response.body);
   }
 }
